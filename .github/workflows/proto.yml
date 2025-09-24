@@ -20,15 +20,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: chris5451/aws-ecr-run-image@main
-        with:
-          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
-          account_id: ${{ secrets.AWS_ACCOUNT_ID }}
-          repo: bem_local_dev
-          region: ${{ secrets.AWS_REGION }}
-          tag: latest
-          name: bem
-          port: 8080
+      with:
+         access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         secret_access_key: ${{ secrets.AWS_ACCESS_SECRET_KEY }}
+         account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+         repo: bem_local_dev
+         region: ${{ secrets.AWS_REGION }}
+         tag: latest
+         name: bem
+         port: 8080
   
   build:
     # The type of runner that the job will run on
