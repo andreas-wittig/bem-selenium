@@ -14,11 +14,11 @@ on:
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-# 2 Jobs, Image holen und den Proto "build"
 jobs:
   pull-and-run:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
     - uses: chris5451/aws-ecr-run-image@main
         with:
           access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
