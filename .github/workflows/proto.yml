@@ -19,7 +19,6 @@ jobs:
   pull-and-run:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
     - uses: chris5451/aws-ecr-run-image@main
         with:
           access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
