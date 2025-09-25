@@ -34,29 +34,4 @@ jobs:
           # Der Hostname ist der Service-Name
           mariadb -u root -proot -h mariadb mydatabase < dump/database.sql
 
-      - name: Login to AWS ECR
-        uses: aws-actions/aws-ecr-login@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-central-1
 
-      - name: Pull and Run Docker image
-        run: |
-          # docker pull your-aws-ecr-repository/your-image-name:latest
-          docker pull ${{ secrets.AWS_ECR_REPOSITORY }}/bem_local_dev:latest
-          
-          docker run -d --name bem-container \
-          -p 8080:8080 \
-          --env DATABASE_HOST=mariadb \
-          --env DATABASE_PORT=3306 \
-          --env DATABASE_USER=root \
-          --env DATABASE_PASSWORD=root \
-          --env DATABASE_NAME=mydatabase \
-          ${{ secrets.AWS_ECR_REPOSITORY }}/bem_local_dev:latest
-          
-      - name: Wait for WebApp to be ready
-        run: sleep 10
-
-      - name: Test WebApp access
-        run: curl http://localhost:8080/health
