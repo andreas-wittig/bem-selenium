@@ -26,7 +26,7 @@ jobs:
           account_id: ${{ secrets.AWS_ACCOUNT_ID }}
           repo: bem_local_dev
           region: ${{ secrets.AWS_REGION }}
-          tag: 4.62.0-SNAPSHOT-20250902.0909
+          tag: latest
           name: bem
           port: 8080
   
