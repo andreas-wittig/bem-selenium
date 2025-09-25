@@ -1,0 +1,55 @@
+name: Deploy WebApp with MariaDB
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    # Hier wird der MariaDB-Service definiert
+    services:
+      mariadb:
+        image: mariadb:10.5
+        env:
+          MYSQL_ROOT_PASSWORD: my-secret-pw
+          MYSQL_DATABASE: mydatabase
+        ports:
+          - 3306:3306 # Optional, um den Port nach außen zu mappen
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Jetzt kann direkt auf den Service "mariadb" zugegriffen werden
+      - name: Import MariaDB dump
+        run: |
+          # Der Hostname ist der Service-Name
+          mariadb -u root -pmy-secret-pw -h mariadb mydatabase < dump/database.sql
+
+      - name: Login to AWS ECR
+        uses: aws-actions/aws-ecr-login@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Pull and Run Docker image
+        run: |
+          docker pull your-aws-ecr-repository/your-image-name:latest
+          docker run -d --name my-webapp-container \
+          -p 8080:80 \
+          --env DATABASE_HOST=mariadb \
+          --env DATABASE_PORT=3306 \
+          --env DATABASE_USER=root \
+          --env DATABASE_PASSWORD=my-secret-pw \
+          --env DATABASE_NAME=mydatabase \
+          your-aws-ecr-repository/your-image-name:latest
+          
+      - name: Wait for WebApp to be ready
+        run: sleep 10
+
+      - name: Test WebApp access
+        run: curl http://localhost:8080/health
