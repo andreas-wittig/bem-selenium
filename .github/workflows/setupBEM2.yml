@@ -35,7 +35,7 @@ jobs:
           mariadb -u root -proot -h mariadb mydatabase < dump/database.sql
 
       - name: Login to AWS ECR
-        uses: aws-actions/aws-ecr-login@v1
+        uses: aws-actions/aws-ecr-login@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
